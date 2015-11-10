@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">MVPtemplate</string>
+    <string name="s_post_id">Post ID</string>
+    <string name="s_user_id">User ID</string>
+    <string name="s_post_title">Post Title</string>
+    <string name="s_title_global_posts">Global Posts</string>
+    <string name="s_loading_post_detail">Loading post detail</string>
+    <string name="s_comments_in_post">Comments in Post</string>
+
+</resources>
