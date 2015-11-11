@@ -6,6 +6,7 @@ import java.util.List;
 
 import retrofit.Call;
 import retrofit.http.GET;
+import retrofit.http.Query;
 
 /**
  * @author pcarrillo
@@ -14,7 +15,7 @@ import retrofit.http.GET;
  */
 public interface APIService {
 
-    @GET("posts")
-    Call<List<Post>> getPosts();
+    @GET("posts?_limit=10")
+    Call<List<Post>> getPosts(@Query("_start") int start);
 
 }

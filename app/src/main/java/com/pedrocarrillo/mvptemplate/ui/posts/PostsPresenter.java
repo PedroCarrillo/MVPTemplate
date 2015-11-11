@@ -1,11 +1,11 @@
 package com.pedrocarrillo.mvptemplate.ui.posts;
 
-import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 
+import com.pedrocarrillo.mvptemplate.data.PostRepository;
 import com.pedrocarrillo.mvptemplate.model.Post;
-import com.pedrocarrillo.mvptemplate.networking.interactors.PostInteractor;
-import com.pedrocarrillo.mvptemplate.networking.interfaces.PostLoadedListener;
+import com.pedrocarrillo.mvptemplate.networking.services.PostServeAPIImp;
+import com.pedrocarrillo.mvptemplate.networking.services.PostServiceAPI;
 
 import java.util.List;
 
@@ -13,19 +13,25 @@ import java.util.List;
  * @author pcarrillo
  *         on 09/11/2015 for MVPtemplate.
  */
-public class PostsPresenter implements PostsContractor.PostsPresenter<PostsContractor.PostsView>, PostLoadedListener {
+public class PostsPresenter implements PostsContractor.PostsPresenter<PostsContractor.PostsView> {
 
     private PostsContractor.PostsView mPostsView;
-    private PostInteractor postInteractor;
+    private PostRepository mPostsRepository;
 
-    public PostsPresenter(){
-        postInteractor = new PostInteractorImp();
+    public PostsPresenter(@NonNull PostRepository postRepository){
+        mPostsRepository = postRepository;
     }
 
     @Override
     public void loadPosts(boolean forceUpdate) {
         mPostsView.setProgressIndicator(true);
-        postInteractor.fetchPosts(this);
+        mPostsRepository.getPosts(new PostRepository.LoadPostsCallback() {
+            @Override
+            public void onPostsLoaded(List<Post> posts) {
+                mPostsView.showPosts(posts);
+                mPostsView.setProgressIndicator(false);
+            }
+        }, forceUpdate);
     }
 
     @Override
@@ -41,14 +47,6 @@ public class PostsPresenter implements PostsContractor.PostsPresenter<PostsContr
     @Override
     public void detachView() {
         mPostsView = null;
-    }
-
-    @Override
-    public void postListLoaded(List<Post> postList) {
-        if (mPostsView != null) {
-            mPostsView.showPosts(postList);
-            mPostsView.setProgressIndicator(false);
-        }
     }
 
 }

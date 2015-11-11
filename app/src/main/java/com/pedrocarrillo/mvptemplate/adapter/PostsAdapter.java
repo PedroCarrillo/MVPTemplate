@@ -25,6 +25,7 @@
 package com.pedrocarrillo.mvptemplate.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,63 +41,80 @@ import java.util.List;
  * @author Carlos Piñan
  */
 
-public class PostsAdapter extends BaseAdapter {
+public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
-    private List<Post> listPosts;
+    private List<Post> mPosts;
+    private PostItemListener mItemListener;
     private LayoutInflater inflater;
 
-    public PostsAdapter(Context context, List<Post> listPosts) {
-        this.listPosts = listPosts;
-        this.inflater = LayoutInflater.from(context);
+    public PostsAdapter(List<Post> posts, PostItemListener itemListener) {
+        setList(posts);
+        mItemListener = itemListener;
     }
 
     @Override
-    public int getCount() {
-        return getListPosts().size();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View postView = inflater.inflate(R.layout.list_posts, parent, false);
+        return new ViewHolder(postView, mItemListener);
     }
 
     @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        Post post = mPosts.get(position);
+        viewHolder.userIdTextView.setText(String.valueOf(post.getUserId()));
+        viewHolder.postIdTextView.setText(String.valueOf(post.getId()));
+        viewHolder.titleTextView.setText(post.getTitle());
+    }
+
+    public void replaceData(List<Post> posts) {
+        setList(posts);
+        notifyDataSetChanged();
+    }
+
+    private void setList(List<Post> posts) {
+        this.mPosts = posts;
+    }
+
+    @Override
+    public int getItemCount() {
+        return mPosts.size();
+    }
+
     public Post getItem(int position) {
-        return getListPosts().get(position);
+        return mPosts.get(position);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    @Override
-    public View getView(int position, View view, ViewGroup container) {
-        final ViewHolder holder;
-        final Post post = getItem(position);
-        if (view == null || view.getTag() == null) {
-            holder = new ViewHolder();
-            view = inflater.inflate(R.layout.list_posts, container, false);
-            holder.postIdTextView = (TextView) view.findViewById(R.id.postIdTextView);
-            holder.userIdTextView = (TextView) view.findViewById(R.id.userIdTextView);
-            holder.titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
-        }
-        holder.userIdTextView.setText(String.valueOf(post.getUserId()));
-        holder.postIdTextView.setText(String.valueOf(post.getId()));
-        holder.titleTextView.setText(post.getTitle());
-        return view;
-    }
-
-    public List<Post> getListPosts() {
-        return listPosts;
-    }
-
-    public void setListPosts(List<Post> listPosts) {
-        this.listPosts = listPosts;
-        this.notifyDataSetChanged();
-    }
-
-    private static class ViewHolder {
         public TextView userIdTextView;
         public TextView postIdTextView;
         public TextView titleTextView;
+
+        private PostItemListener mItemListener;
+
+        public ViewHolder(View itemView, PostItemListener listener) {
+            super(itemView);
+            mItemListener = listener;
+            postIdTextView = (TextView) itemView.findViewById(R.id.postIdTextView);
+            userIdTextView = (TextView) itemView.findViewById(R.id.userIdTextView);
+            titleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Post post = getItem(position);
+            mItemListener.onPostClick(post);
+        }
     }
+
+    public interface PostItemListener {
+
+        void onPostClick(Post clickedPost);
+
+    }
+
 }
