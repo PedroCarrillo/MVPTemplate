@@ -23,7 +23,7 @@ public class PostsPresenter implements PostsContractor.PostsPresenter<PostsContr
     }
 
     @Override
-    public void loadPosts(boolean forceUpdate) {
+    public void loadPosts(boolean loadMore, boolean forceUpdate) {
         mPostsView.setProgressIndicator(true);
         mPostsRepository.getPosts(new PostRepository.LoadPostsCallback() {
             @Override
@@ -31,7 +31,7 @@ public class PostsPresenter implements PostsContractor.PostsPresenter<PostsContr
                 mPostsView.showPosts(posts);
                 mPostsView.setProgressIndicator(false);
             }
-        }, forceUpdate);
+        }, loadMore, forceUpdate);
     }
 
     @Override

@@ -17,6 +17,6 @@ public interface PostRepository {
         void onPostsLoaded(List<Post> posts);
     }
 
-    void getPosts(@NonNull LoadPostsCallback callback, boolean loadMore);
+    void getPosts(@NonNull LoadPostsCallback callback, boolean loadMore, boolean forceUpdate);
 
 }

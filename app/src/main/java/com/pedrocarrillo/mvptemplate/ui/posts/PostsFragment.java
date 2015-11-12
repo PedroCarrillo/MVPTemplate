@@ -2,6 +2,7 @@ package com.pedrocarrillo.mvptemplate.ui.posts;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,7 +26,9 @@ import java.util.List;
 public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter>  implements PostsContractor.PostsView, PostsAdapter.PostItemListener {
 
     private RecyclerView rvPosts;
+    private SwipeRefreshLayout swlMain;
     private PostsAdapter mPostAdapter;
+    private EndlessRecyclerOnScrollListener mEndlessRecyclerOnScrollListener;
 
     public static PostsFragment newInstance() {
         return new PostsFragment();
@@ -37,32 +40,30 @@ public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter> 
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         rvPosts = (RecyclerView)rootView.findViewById(R.id.recyclerView);
+        swlMain = (SwipeRefreshLayout)rootView.findViewById(R.id.srl_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvPosts.setLayoutManager(linearLayoutManager);
-        rvPosts.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+        mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
-                mPresenter.loadPosts(true);
+                mPresenter.loadPosts(true, false);
+            }
+        };
+        rvPosts.addOnScrollListener(mEndlessRecyclerOnScrollListener);
+        swlMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mEndlessRecyclerOnScrollListener.reset();
+                mPresenter.loadPosts(false, true);
             }
         });
-
-//        rvPosts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                int index = position - 1; // For header view it could be fixed just using the adapter from the adapterView
-//                if (mPostAdapter.getItem(index) != null) {
-//                    Post post = mPostAdapter.getItem(index);
-//                    mPresenter.openPostDetails(post);
-//                }
-//            }
-//        });
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.loadPosts(false);
+        mPresenter.loadPosts(false, false);
     }
 
     @Override
@@ -78,6 +79,7 @@ public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter> 
 
     @Override
     public void showPosts(List<Post> posts) {
+        swlMain.setRefreshing(false);
         if (mPostAdapter == null) {
             mPostAdapter = new PostsAdapter(posts, this);
             rvPosts.setAdapter(mPostAdapter);
@@ -92,6 +94,7 @@ public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter> 
 
     @Override
     public void onPostClick(Post clickedPost) {
-
+        mPresenter.openPostDetails(clickedPost);
     }
+
 }

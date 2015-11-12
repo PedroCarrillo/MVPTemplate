@@ -24,7 +24,7 @@ public class PostsContractor {
 
     interface PostsPresenter<View> extends MvpPresenter<View> {
 
-        void loadPosts(boolean forceUpdate);
+        void loadPosts(boolean loadMore, boolean forceUpdate);
 
         void openPostDetails(@NonNull Post postClicked);
 

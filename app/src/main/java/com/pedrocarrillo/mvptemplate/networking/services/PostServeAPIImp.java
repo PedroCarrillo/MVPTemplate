@@ -1,5 +1,7 @@
 package com.pedrocarrillo.mvptemplate.networking.services;
 
+import android.util.Log;
+
 import com.pedrocarrillo.mvptemplate.model.Post;
 import com.pedrocarrillo.mvptemplate.networking.services.PostServiceAPI;
 import com.pedrocarrillo.mvptemplate.util.API;
@@ -18,6 +20,7 @@ public class PostServeAPIImp implements PostServiceAPI {
 
     @Override
     public void getPosts(final PostServiceCallback<List<Post>> callback, int offset) {
+        Log.e("a", "getPosts() called with: " + "callback = [" + callback + "], offset = [" + offset + "]");
         Call<List<Post>> callListPosts = API.get().getRetrofitService().getPosts(offset);
         callListPosts.enqueue(new Callback<List<Post>>() {
             @Override
@@ -30,6 +33,7 @@ public class PostServeAPIImp implements PostServiceAPI {
                 // TODO Implement generic alert dialog.
             }
         });
+
     }
 
 

@@ -15,7 +15,7 @@ import retrofit.http.Query;
  */
 public interface APIService {
 
-    @GET("posts?_limit=10")
+    @GET("posts?_limit=20")
     Call<List<Post>> getPosts(@Query("_start") int start);
 
 }

@@ -16,27 +16,27 @@ import java.util.List;
 public class PostsManager implements PostRepository {
 
     private final PostServiceAPI mPostServiceApi;
-    private List<Post> mPosts;
+    private List<Post> mPosts = new ArrayList<>();
 
     public PostsManager(@NonNull PostServiceAPI postServiceAPI) {
         mPostServiceApi = postServiceAPI;
     }
 
     @Override
-    public void getPosts(@NonNull final LoadPostsCallback callback, boolean loadMore) {
-        if (mPosts == null) {
-            this.mPosts = new ArrayList<>();
+    public void getPosts(@NonNull final LoadPostsCallback callback, boolean loadMore, boolean forceUpdate) {
+        if (forceUpdate) {
+            mPosts.clear();
         }
-        if (!loadMore) {
-//            mPosts.clear();
+        if (!loadMore && !mPosts.isEmpty()) {
+            callback.onPostsLoaded(mPosts);
+        } else {
+            mPostServiceApi.getPosts(new PostServiceAPI.PostServiceCallback<List<Post>>() {
+                @Override
+                public void onLoaded(List<Post> posts) {
+                    mPosts.addAll(new ArrayList<>(posts));
+                    callback.onPostsLoaded(mPosts);
+                }
+            }, mPosts.size());
         }
-        mPostServiceApi.getPosts(new PostServiceAPI.PostServiceCallback<List<Post>>() {
-            @Override
-            public void onLoaded(List<Post> posts) {
-                mPosts.addAll(new ArrayList<>(posts));
-                callback.onPostsLoaded(mPosts);
-            }
-        }, mPosts.size());
-
     }
 }
