@@ -13,12 +13,12 @@ import java.util.List;
  * @author pcarrillo
  *         on 11/11/2015 for MVPtemplate.
  */
-public class PostsManager implements PostRepository {
+public class InMemoryPostsManager implements PostRepository {
 
     private final PostServiceAPI mPostServiceApi;
     private List<Post> mPosts = new ArrayList<>();
 
-    public PostsManager(@NonNull PostServiceAPI postServiceAPI) {
+    public InMemoryPostsManager(@NonNull PostServiceAPI postServiceAPI) {
         mPostServiceApi = postServiceAPI;
     }
 

@@ -17,7 +17,7 @@ public class PostRepositories {
 
     public synchronized static PostRepository getPostManager(@NonNull PostServiceAPI postServiceAPI) {
         if (repository == null) {
-            repository = new PostsManager(postServiceAPI);
+            repository = new InMemoryPostsManager(postServiceAPI);
         }
         return repository;
     }

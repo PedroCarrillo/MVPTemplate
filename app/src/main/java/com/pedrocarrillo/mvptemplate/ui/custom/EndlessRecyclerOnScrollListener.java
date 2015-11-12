@@ -51,7 +51,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
             loading = true;
         }
-        Log.d(TAG, "visibleItemCount: " + visibleItemCount + "  totalItemCount "+totalItemCount + " firstVisibleItem "+ firstVisibleItem);
     }
 
     public void reset() {
