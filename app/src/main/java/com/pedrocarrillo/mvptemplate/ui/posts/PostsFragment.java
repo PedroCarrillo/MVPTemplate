@@ -14,6 +14,7 @@ import com.pedrocarrillo.mvptemplate.adapter.PostsAdapter;
 import com.pedrocarrillo.mvptemplate.Injection;
 import com.pedrocarrillo.mvptemplate.model.Post;
 import com.pedrocarrillo.mvptemplate.ui.BaseFragment;
+import com.pedrocarrillo.mvptemplate.ui.custom.CustomLinearLayoutManager;
 import com.pedrocarrillo.mvptemplate.ui.custom.EndlessRecyclerOnScrollListener;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.List;
  * @author pcarrillo
  *         on 10/11/2015 for MVPtemplate.
  */
-public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter>  implements PostsContractor.PostsView, PostsAdapter.PostItemListener {
+public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter> implements PostsContractor.PostsView, PostsAdapter.PostItemListener {
 
     private RecyclerView rvPosts;
     private SwipeRefreshLayout swlMain;
@@ -40,13 +41,17 @@ public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter> 
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         rvPosts = (RecyclerView)rootView.findViewById(R.id.recyclerView);
+        rvPosts = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         swlMain = (SwipeRefreshLayout)rootView.findViewById(R.id.srl_main);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        rvPosts.setHasFixedSize(true);
         rvPosts.setLayoutManager(linearLayoutManager);
         mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
-                mPresenter.loadPosts(true, false);
+                if (!mPostAdapter.isLoading()) {
+                    mPresenter.loadPosts(true, false);
+                }
             }
         };
         rvPosts.addOnScrollListener(mEndlessRecyclerOnScrollListener);
@@ -58,6 +63,11 @@ public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter> 
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void showPostsLoading(boolean loading) {
+       if (mPostAdapter != null) mPostAdapter.setLoading(loading);
     }
 
     @Override
@@ -81,10 +91,11 @@ public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter> 
     public void showPosts(List<Post> posts) {
         swlMain.setRefreshing(false);
         if (mPostAdapter == null) {
-            mPostAdapter = new PostsAdapter(posts, this);
+            mPostAdapter = new PostsAdapter(new ArrayList<>(posts), this);
             rvPosts.setAdapter(mPostAdapter);
         }
-        mPostAdapter.replaceData(posts);
+        mPostAdapter.setLoading(false);
+        mPostAdapter.replaceData(new ArrayList<Post>(posts));
     }
 
     @Override

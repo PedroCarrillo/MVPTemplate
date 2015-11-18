@@ -24,12 +24,11 @@ public class PostsPresenter implements PostsContractor.PostsPresenter<PostsContr
 
     @Override
     public void loadPosts(boolean loadMore, boolean forceUpdate) {
-        mPostsView.setProgressIndicator(true);
+        mPostsView.showPostsLoading(true);
         mPostsRepository.getPosts(new PostRepository.LoadPostsCallback() {
             @Override
             public void onPostsLoaded(List<Post> posts) {
                 mPostsView.showPosts(posts);
-                mPostsView.setProgressIndicator(false);
             }
         }, loadMore, forceUpdate);
     }

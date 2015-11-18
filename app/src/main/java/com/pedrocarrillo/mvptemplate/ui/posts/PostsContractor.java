@@ -18,6 +18,8 @@ public class PostsContractor {
 
         void showPosts(List<Post> posts);
 
+        void showPostsLoading(boolean loading);
+
         void showPostDetailUi(Post post);
 
     }

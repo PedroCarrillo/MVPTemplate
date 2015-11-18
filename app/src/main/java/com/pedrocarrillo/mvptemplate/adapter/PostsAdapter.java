@@ -29,7 +29,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.pedrocarrillo.mvptemplate.R;
@@ -39,11 +38,11 @@ import java.util.List;
 
 /**
  * @author Carlos Piñan
+ * @modifiedBy Pedro Carrillo to fit recycler view and load more
  */
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+public class PostsAdapter extends LoadMoreBaseAdapter<Post, PostsAdapter.PostViewHolder> {
 
-    private List<Post> mPosts;
     private PostItemListener mItemListener;
     private LayoutInflater inflater;
 
@@ -53,40 +52,38 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View postView = inflater.inflate(R.layout.list_posts, parent, false);
-        return new ViewHolder(postView, mItemListener);
+        return new PostViewHolder(postView, mItemListener);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Post post = mPosts.get(position);
-        viewHolder.userIdTextView.setText(String.valueOf(post.getUserId()));
-        viewHolder.postIdTextView.setText(String.valueOf(post.getId()));
-        viewHolder.titleTextView.setText(post.getTitle());
+    public void onBindDataViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == VIEW_TYPE_DATA) {
+            bindPostViewHolder((PostViewHolder)holder, position);
+        }
+    }
+
+    private void bindPostViewHolder(PostViewHolder postViewHolder, int position) {
+        Post post = data.get(position);
+        postViewHolder.userIdTextView.setText(String.valueOf(post.getUserId()));
+        postViewHolder.postIdTextView.setText(String.valueOf(post.getId()));
+        postViewHolder.titleTextView.setText(post.getTitle());
     }
 
     public void replaceData(List<Post> posts) {
+        data.clear();
         setList(posts);
         notifyDataSetChanged();
     }
 
     private void setList(List<Post> posts) {
-        this.mPosts = posts;
+        this.data = posts;
     }
 
-    @Override
-    public int getItemCount() {
-        return mPosts.size();
-    }
-
-    public Post getItem(int position) {
-        return mPosts.get(position);
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView userIdTextView;
         public TextView postIdTextView;
@@ -94,7 +91,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         private PostItemListener mItemListener;
 
-        public ViewHolder(View itemView, PostItemListener listener) {
+        public PostViewHolder(View itemView, PostItemListener listener) {
             super(itemView);
             mItemListener = listener;
             postIdTextView = (TextView) itemView.findViewById(R.id.postIdTextView);
