@@ -24,15 +24,29 @@
 
 package com.pedrocarrillo.mvptemplate.model;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * @author Carlos Piñan
  */
-public class Comment extends BaseModel {
+public class Comment extends RealmObject {
+
+//    @PrimaryKey
+    private String id;
 
     private int postId;
     private String name;
     private String email;
     private String body;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public int getPostId() {
         return postId;

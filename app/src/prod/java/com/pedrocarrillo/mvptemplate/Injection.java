@@ -2,7 +2,9 @@ package com.pedrocarrillo.mvptemplate;
 
 import com.pedrocarrillo.mvptemplate.data.PostRepositories;
 import com.pedrocarrillo.mvptemplate.data.PostRepository;
+import com.pedrocarrillo.mvptemplate.networking.services.PostRealmAPIImp;
 import com.pedrocarrillo.mvptemplate.networking.services.PostServeAPIImp;
+import com.pedrocarrillo.mvptemplate.util.API;
 
 /**
  * @author pcarrillo
@@ -11,7 +13,7 @@ import com.pedrocarrillo.mvptemplate.networking.services.PostServeAPIImp;
 public class Injection {
 
     public static PostRepository provideNotesRepository() {
-        return PostRepositories.getPostManager(new PostServeAPIImp());
+        return PostRepositories.getPostManager(API.isConnected() ? new PostServeAPIImp() : new PostRealmAPIImp());
     }
 
 }

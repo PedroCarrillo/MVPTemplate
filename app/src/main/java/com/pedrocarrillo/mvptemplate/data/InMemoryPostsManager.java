@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class InMemoryPostsManager implements PostRepository {
 
-    private final PostServiceAPI mPostServiceApi;
+    private PostServiceAPI mPostServiceApi;
     private List<Post> mPosts = new ArrayList<>();
 
     public InMemoryPostsManager(@NonNull PostServiceAPI postServiceAPI) {
@@ -38,5 +38,9 @@ public class InMemoryPostsManager implements PostRepository {
                 }
             }, mPosts.size());
         }
+    }
+
+    public void switchAPILayer(@NonNull PostServiceAPI postServiceAPI) {
+        this.mPostServiceApi = postServiceAPI;
     }
 }

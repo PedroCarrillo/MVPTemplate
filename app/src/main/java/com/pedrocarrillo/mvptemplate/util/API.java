@@ -1,5 +1,10 @@
 package com.pedrocarrillo.mvptemplate.util;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import com.pedrocarrillo.mvptemplate.MvpTemplateApp;
 import com.pedrocarrillo.mvptemplate.networking.interfaces.APIService;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -42,6 +47,19 @@ public class API {
             service = retrofit.create(APIService.class);
         }
         return service;
+    }
+
+    public static boolean isConnected() {
+        ConnectivityManager conMgr = (ConnectivityManager) MvpTemplateApp.getContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo i = conMgr.getActiveNetworkInfo();
+        if (i == null)
+            return false;
+        if (!i.isConnected())
+            return false;
+        if (!i.isAvailable())
+            return false;
+        return true;
     }
 
 }

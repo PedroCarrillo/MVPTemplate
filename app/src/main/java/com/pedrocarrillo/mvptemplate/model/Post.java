@@ -24,14 +24,27 @@
 
 package com.pedrocarrillo.mvptemplate.model;
 
+import com.pedrocarrillo.mvptemplate.util.RealmManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+
 /**
  * @author Carlos Piñan
  */
-public class Post extends BaseModel {
+public class Post {
+
+    private String id;
 
     private int userId;
     private String title;
     private String body;
+
+    public Post() {
+    }
 
     public int getUserId() {
         return userId;
@@ -55,5 +68,43 @@ public class Post extends BaseModel {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public PostRealm saveToRealm() {
+        PostRealm postRealm = new PostRealm();
+        postRealm.setId(id);
+        postRealm.setBody(body);
+        postRealm.setTitle(title);
+        postRealm.setUserId(userId);
+        return postRealm;
+    }
+
+    public static void savePostsToRealm(List<Post> posts) {
+        List<PostRealm> postRealms = new ArrayList<>();
+        for (Post post : posts) {
+            postRealms.add(post.saveToRealm());
+        }
+        RealmManager.getInstance().save(postRealms, PostRealm.class);
+    }
+
+    public static List<Post> obtainFromResult(List<PostRealm> postRealms) {
+        List<Post> postList = new ArrayList<>();
+        for (PostRealm postRealm : postRealms) {
+            Post post = new Post();
+            post.setId(postRealm.getId());
+            post.setBody(postRealm.getBody());
+            post.setTitle(postRealm.getTitle());
+            post.setUserId(postRealm.getUserId());
+            postList.add(post);
+        }
+        return postList;
     }
 }

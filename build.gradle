@@ -26,5 +26,5 @@ task clean(type: Delete) {
 // Define versions in a single place
 ext {
     // App dependencies
-    supportLibraryVersion = '23.1.0'
+    supportLibraryVersion = '23.1.1'
 }

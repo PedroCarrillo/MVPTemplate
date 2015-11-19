@@ -5,6 +5,7 @@ import android.util.Log;
 import com.pedrocarrillo.mvptemplate.model.Post;
 import com.pedrocarrillo.mvptemplate.networking.services.PostServiceAPI;
 import com.pedrocarrillo.mvptemplate.util.API;
+import com.pedrocarrillo.mvptemplate.util.RealmManager;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class PostServeAPIImp implements PostServiceAPI {
         callListPosts.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Response<List<Post>> response) {
+                Post.savePostsToRealm(response.body());
                 callback.onLoaded(response.body());
             }
 

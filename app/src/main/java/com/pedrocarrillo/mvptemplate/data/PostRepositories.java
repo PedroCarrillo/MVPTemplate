@@ -2,7 +2,10 @@ package com.pedrocarrillo.mvptemplate.data;
 
 import android.support.annotation.NonNull;
 
+import com.pedrocarrillo.mvptemplate.networking.services.PostRealmAPIImp;
+import com.pedrocarrillo.mvptemplate.networking.services.PostServeAPIImp;
 import com.pedrocarrillo.mvptemplate.networking.services.PostServiceAPI;
+import com.pedrocarrillo.mvptemplate.util.API;
 
 /**
  * @author pcarrillo
@@ -22,5 +25,9 @@ public class PostRepositories {
         return repository;
     }
 
+    public synchronized static void changeOffLineRepository(boolean online) {
+        ((InMemoryPostsManager) repository).switchAPILayer(online ? new PostServeAPIImp() : new PostRealmAPIImp());
+    }
 
 }
+

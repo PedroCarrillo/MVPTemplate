@@ -14,7 +14,6 @@ import com.pedrocarrillo.mvptemplate.adapter.PostsAdapter;
 import com.pedrocarrillo.mvptemplate.Injection;
 import com.pedrocarrillo.mvptemplate.model.Post;
 import com.pedrocarrillo.mvptemplate.ui.BaseFragment;
-import com.pedrocarrillo.mvptemplate.ui.custom.CustomLinearLayoutManager;
 import com.pedrocarrillo.mvptemplate.ui.custom.EndlessRecyclerOnScrollListener;
 
 import java.util.ArrayList;
