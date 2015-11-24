@@ -24,8 +24,10 @@ android {
 
     productFlavors {
         mock {
+            buildConfigField "String", "SERVER_URL", "\"http://jsonplaceholder.typicode.com/\""
         }
         prod {
+            buildConfigField "String", "SERVER_URL", "\"http://jsonplaceholder.typicode.com/\""
         }
     }
 

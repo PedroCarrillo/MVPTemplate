@@ -14,6 +14,14 @@ import java.util.List;
  */
 public class PostsContractor {
 
+    interface PostsPresenter<View> extends MvpPresenter<View> {
+
+        void loadPosts(boolean loadMore, boolean forceUpdate);
+
+        void openPostDetails(@NonNull Post postClicked);
+
+    }
+
     interface PostsView extends MvpView {
 
         void showPosts(List<Post> posts);
@@ -21,14 +29,6 @@ public class PostsContractor {
         void showPostsLoading(boolean loading);
 
         void showPostDetailUi(Post post);
-
-    }
-
-    interface PostsPresenter<View> extends MvpPresenter<View> {
-
-        void loadPosts(boolean loadMore, boolean forceUpdate);
-
-        void openPostDetails(@NonNull Post postClicked);
 
     }
 

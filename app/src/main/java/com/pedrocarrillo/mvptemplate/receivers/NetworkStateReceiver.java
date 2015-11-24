@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.pedrocarrillo.mvptemplate.data.PostRepositories;
-import com.pedrocarrillo.mvptemplate.networking.services.PostServeAPIImp;
 
 /**
  * @author pcarrillo

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.pedrocarrillo.mvptemplate.BuildConfig;
 import com.pedrocarrillo.mvptemplate.MvpTemplateApp;
 import com.pedrocarrillo.mvptemplate.networking.interfaces.APIService;
 import com.squareup.okhttp.OkHttpClient;
@@ -17,8 +18,6 @@ import retrofit.Retrofit;
  *         on 10/11/2015 for MVPtemplate.
  */
 public class API {
-
-    public static final String ENDPOINT_URL = "http://jsonplaceholder.typicode.com/";
 
     private static API instance;
 
@@ -40,7 +39,7 @@ public class API {
             OkHttpClient client = new OkHttpClient();
             client.interceptors().add(new LoggingInterceptor());
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(ENDPOINT_URL)
+                    .baseUrl(BuildConfig.SERVER_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();

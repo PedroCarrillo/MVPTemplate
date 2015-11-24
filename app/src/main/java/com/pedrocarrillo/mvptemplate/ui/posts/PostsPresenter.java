@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.pedrocarrillo.mvptemplate.data.PostRepository;
 import com.pedrocarrillo.mvptemplate.model.Post;
-import com.pedrocarrillo.mvptemplate.networking.services.PostServeAPIImp;
-import com.pedrocarrillo.mvptemplate.networking.services.PostServiceAPI;
 
 import java.util.List;
 
