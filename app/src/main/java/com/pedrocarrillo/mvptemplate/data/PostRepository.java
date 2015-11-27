@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface PostRepository {
 
-    interface LoadPostsCallback {
+        interface LoadPostsCallback {
 
         void onPostsLoaded(List<Post> posts);
     }

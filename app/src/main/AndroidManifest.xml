@@ -6,11 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".MvpTemplateApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".MvpTemplateApp"
         android:theme="@style/AppTheme" >
         <activity android:name=".ui.posts.PostsActivity" >
             <intent-filter>
@@ -20,12 +20,17 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".receivers.NetworkStateReceiver">
+        <receiver android:name=".receivers.NetworkStateReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".ui.postdetail.PostDetailActivity"
+            android:label="@string/title_activity_post_detail"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

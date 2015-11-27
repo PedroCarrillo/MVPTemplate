@@ -27,4 +27,8 @@ task clean(type: Delete) {
 ext {
     // App dependencies
     supportLibraryVersion = '23.1.1'
+    junitVersion = '4.12'
+    mockitoVersion = '1.10.19'
+    powerMockito = '1.6.2'
+    hamcrestVersion = '1.3'
 }

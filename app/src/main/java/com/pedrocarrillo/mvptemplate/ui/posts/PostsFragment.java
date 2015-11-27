@@ -1,5 +1,6 @@
 package com.pedrocarrillo.mvptemplate.ui.posts;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +16,7 @@ import com.pedrocarrillo.mvptemplate.Injection;
 import com.pedrocarrillo.mvptemplate.model.Post;
 import com.pedrocarrillo.mvptemplate.ui.BaseFragment;
 import com.pedrocarrillo.mvptemplate.ui.custom.EndlessRecyclerOnScrollListener;
+import com.pedrocarrillo.mvptemplate.ui.postdetail.PostDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,13 +95,14 @@ public class PostsFragment extends BaseFragment<PostsContractor.PostsPresenter> 
             mPostAdapter = new PostsAdapter(new ArrayList<>(posts), this);
             rvPosts.setAdapter(mPostAdapter);
         }
-        mPostAdapter.setLoading(false);
+//        mPostAdapter.setLoading(false);
         mPostAdapter.replaceData(new ArrayList<Post>(posts));
     }
 
     @Override
     public void showPostDetailUi(Post post) {
-
+        Intent intent = new Intent(getActivity(), PostDetailActivity.class);
+        startActivity(intent);
     }
 
     @Override

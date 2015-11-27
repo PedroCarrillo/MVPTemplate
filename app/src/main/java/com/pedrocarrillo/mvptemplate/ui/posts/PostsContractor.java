@@ -12,7 +12,7 @@ import java.util.List;
  * @author pcarrillo
  *         on 09/11/2015 for MVPtemplate.
  */
-public class PostsContractor {
+public interface PostsContractor {
 
     interface PostsPresenter<View> extends MvpPresenter<View> {
 

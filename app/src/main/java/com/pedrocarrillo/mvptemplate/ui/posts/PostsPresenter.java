@@ -26,6 +26,7 @@ public class PostsPresenter implements PostsContractor.PostsPresenter<PostsContr
         mPostsRepository.getPosts(new PostRepository.LoadPostsCallback() {
             @Override
             public void onPostsLoaded(List<Post> posts) {
+                mPostsView.showPostsLoading(false);
                 mPostsView.showPosts(posts);
             }
         }, loadMore, forceUpdate);
@@ -33,7 +34,8 @@ public class PostsPresenter implements PostsContractor.PostsPresenter<PostsContr
 
     @Override
     public void openPostDetails(@NonNull Post postClicked) {
-
+        //Some validations
+        mPostsView.showPostDetailUi(postClicked);
     }
 
     @Override
